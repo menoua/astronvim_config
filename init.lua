@@ -75,9 +75,9 @@ local config = {
         "<cmd>Telescope file_browser path=%:p:h select_buffer=true<cr>",
         desc = "File browser",
       },
-      ["<leader>fr"] = {
+      ["<leader>fx"] = {
         "<cmd>Telescope bibtex<cr>",
-        desc = "Find citation",
+        desc = "Insert bibtex citation",
       },
     },
     t = {},
@@ -180,7 +180,7 @@ local config = {
     {
       "nvim-telescope/telescope.nvim",
       config = function(plugin, opts)
-        require "plugins.configs.telescope" (plugin, opts) -- include the default astronvim config
+        require "plugins.configs.telescope"(plugin, opts) -- include the default astronvim config
         local telescope = require "telescope"
 
         telescope.setup {
