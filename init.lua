@@ -11,6 +11,12 @@ local config = {
   options = {
     opt = {},
     g = {
+      -- Leader key
+      mapleader = " ",
+
+      -- Disable this if you don't want formatting on save
+      autoformat_enabled = true,
+
       -- Background transparency
       transparency = 0.85,
 
@@ -41,6 +47,7 @@ local config = {
 
   diagnostics = {
     underline = false,
+    update_in_insert = false,
   },
 
   -- Extend LSP configuration
