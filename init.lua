@@ -14,9 +14,6 @@ local config = {
       -- Leader key
       mapleader = " ",
 
-      -- Disable this if you don't want formatting on save
-      autoformat_enabled = true,
-
       -- Background transparency
       transparency = 0.85,
 
@@ -54,8 +51,16 @@ local config = {
   lsp = {
     -- Enable servers that you already have installed without mason
     servers = {},
+
     -- Formatting options
-    formatting = {},
+    formatting = {
+      format_on_save = {
+        enabled = true, -- Set to false to disable autoformatting entirely
+        allow_filetypes = { "lua", "rust" }, -- Whitelist file types to be formatted on save
+        -- ignore_filetypes = { "markdown", "python" }, -- Blacklist file types to be formatted on save
+      },
+    },
+
     -- Easily add or disable built in mappings added during LSP attaching
     mappings = {
       n = {
@@ -71,13 +76,25 @@ local config = {
   mappings = {
     -- First key is the mode
     n = {
+      -- Telescope file browser extension
       ["<leader>fe"] = {
         "<cmd>Telescope file_browser path=%:p:h select_buffer=true<cr>",
         desc = "File browser",
       },
+      -- Telescope bibtex extension
       ["<leader>fx"] = {
         "<cmd>Telescope bibtex<cr>",
         desc = "Insert bibtex citation",
+      },
+
+      -- Open dashboard when closing last buffer
+      ["<leader>c"] = {
+        function()
+          local bufs = vim.fn.getbufinfo { buflisted = true }
+          require("astronvim.utils.buffer").close(0)
+          if utils.is_available "alpha-nvim" and not bufs[2] then require("alpha").start(true) end
+        end,
+        desc = "Close buffer",
       },
     },
     t = {},
@@ -85,6 +102,32 @@ local config = {
 
   -- Configure plugins
   plugins = {
+    -- Customize dashboard header
+    {
+      "goolord/alpha-nvim",
+      opts = function(_, opts)
+        opts.section.header.val = {
+          "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡀⠀⠀⠀⠀⢀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ ",
+          "⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⡖⠁⠀⠀⠀⠀⠀⠀⠈⢲⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀ ",
+          "⠀⠀⠀⠀⠀⠀⠀⠀⣼⡏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢹⣧⠀⠀⠀⠀⠀⠀⠀⠀ ",
+          "⠀⠀⠀⠀⠀⠀⠀⣸⣿⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⣿⣇⠀⠀⠀⠀⠀⠀⠀ ",
+          "⠀⠀⠀⠀⠀⠀⠀⣿⣿⡇⠀⢀⣀⣤⣤⣤⣤⣀⡀⠀⢸⣿⣿⠀⠀⠀⠀⠀⠀⠀ ",
+          "⠀⠀⠀⠀⠀⠀⠀⢻⣿⣿⣔⢿⡿⠟⠛⠛⠻⢿⡿⣢⣿⣿⡟⠀⠀⠀⠀⠀⠀⠀ ",
+          "⠀⠀⠀⠀⣀⣤⣶⣾⣿⣿⣿⣷⣤⣀⡀⢀⣀⣤⣾⣿⣿⣿⣷⣶⣤⡀⠀⠀⠀⠀ ",
+          "⠀⠀⢠⣾⣿⡿⠿⠿⠿⣿⣿⣿⣿⡿⠏⠻⢿⣿⣿⣿⣿⠿⠿⠿⢿⣿⣷⡀⠀⠀ ",
+          "⠀⢠⡿⠋⠁⠀⠀⢸⣿⡇⠉⠻⣿⠇⠀⠀⠸⣿⡿⠋⢰⣿⡇⠀⠀⠈⠙⢿⡄⠀ ",
+          "⠀⡿⠁⠀⠀⠀⠀⠘⣿⣷⡀⠀⠰⣿⣶⣶⣿⡎⠀⢀⣾⣿⠇⠀⠀⠀⠀⠈⢿⠀ ",
+          "⠀⡇⠀⠀⠀⠀⠀⠀⠹⣿⣷⣄⠀⣿⣿⣿⣿⠀⣠⣾⣿⠏⠀⠀⠀⠀⠀⠀⢸⠀ ",
+          "⠀⠁⠀⠀⠀⠀⠀⠀⠀⠈⠻⢿⢇⣿⣿⣿⣿⡸⣿⠟⠁⠀⠀⠀⠀⠀⠀⠀⠈⠀ ",
+          "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣼⣿⣿⣿⣿⣧⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ ",
+          "⠀⠀⠀⠐⢤⣀⣀⢀⣀⣠⣴⣿⣿⠿⠋⠙⠿⣿⣿⣦⣄⣀⠀⠀⣀⡠⠂⠀⠀⠀ ",
+          "⠀⠀⠀⠀⠀⠈⠉⠛⠛⠛⠛⠉⠀⠀⠀⠀⠀⠈⠉⠛⠛⠛⠛⠋⠁⠀⠀⠀⠀⠀ ",
+        }
+        return opts
+      end,
+    },
+
+    -- Configure linters/formatters through null-ls
     {
       "null-ls.nvim",
       opts = function(_, config)
@@ -141,7 +184,7 @@ local config = {
     -- Markdown support
     { import = "astrocommunity.pack.markdown" },
 
-    -- Copilot
+    -- Copilot (uncomment to enable)
     -- { import = "astrocommunity.completion.copilot-lua-cmp" },
     -- {
     --   "copilot.lua",
