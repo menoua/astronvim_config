@@ -11,6 +11,9 @@ local config = {
   options = {
     opt = {},
     g = {
+      -- Background transparency
+      transparency = 0.8,
+
       -- Don't show diagnostics virtual text on start
       diagnostics_mode = 2,
 
@@ -68,7 +71,7 @@ local config = {
       ["<leader>fr"] = {
         "<cmd>Telescope bibtex<cr>",
         desc = "Find citation",
-      }
+      },
     },
     t = {},
   },
@@ -78,7 +81,7 @@ local config = {
     {
       "null-ls.nvim",
       opts = function(_, config)
-        local null_ls = require("null-ls")
+        local null_ls = require "null-ls"
 
         -- Check supported formatters and linters
         -- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/formatting
@@ -97,10 +100,28 @@ local config = {
     "AstroNvim/astrocommunity",
 
     -- Color schemes
+    -- Choose which to enable at the top of the file
     { import = "astrocommunity.colorscheme.nightfox" },
     { import = "astrocommunity.colorscheme.kanagawa" },
     { import = "astrocommunity.colorscheme.rose-pine" },
     { import = "astrocommunity.colorscheme.catppuccin" },
+    { import = "astrocommunity.colorscheme.monokai-pro" },
+
+    -- Transparency
+    { import = "astrocommunity.utility.transparent-nvim" },
+
+    -- Indentation
+    { import = "astrocommunity.indent.indent-blankline-nvim" },
+    {
+      "indent-blankline.nvim",
+      opts = {
+        show_current_context = true,
+        show_current_context_start = false,
+      },
+    },
+
+    -- Lua language support
+    { import = "astrocommunity.pack.lua" },
 
     -- Rust language support
     { import = "astrocommunity.pack.rust" },
@@ -139,13 +160,14 @@ local config = {
       keys = { { "<leader>lv", "<cmd>:VenvSelect<cr>", desc = "Select VirtualEnv" } },
     },
     {
-      -- This is needed for pylint to work in a virtualenv. See https://github.com/williamboman/mason.nvim/issues/668#issuecomment-1320859097
+      -- This is needed for pylint to work in a virtualenv.
+      -- See https://github.com/williamboman/mason.nvim/issues/668#issuecomment-1320859097
       "williamboman/mason.nvim",
       opts = {
         PATH = "append",
       },
     },
-    
+
     -- Markdown support
     { import = "astrocommunity.pack.markdown" },
 
@@ -173,6 +195,8 @@ local config = {
       "smartcolumn.nvim",
       opts = {
         colorcolumn = "100",
+        custom_colorcolumn = { lua = "125" },
+        disabled_filetypes = { "NvimTree", "lazy", "mason", "help", "text", "markdown" },
       },
     },
 
@@ -186,10 +210,10 @@ local config = {
     {
       "nvim-telescope/telescope.nvim",
       config = function(plugin, opts)
-        require("plugins.configs.telescope")(plugin, opts) -- include the default astronvim config
-        local telescope = require("telescope")
+        require "plugins.configs.telescope"(plugin, opts) -- include the default astronvim config
+        local telescope = require "telescope"
 
-        telescope.setup({
+        telescope.setup {
           extensions = {
             bibtex = {
               -- Depth for the *.bib file
@@ -221,16 +245,15 @@ local config = {
               wrap = false,
             },
             file_browser = {
-              -- theme = "ivy",
-              -- disables netrw and use telescope-file-browser in its place
+              -- Disable netrw and use telescope-file-browser in its place
               hijack_netrw = true,
             },
           },
-        })
+        }
 
-        telescope.load_extension("file_browser")
-        telescope.load_extension("yank_history")
-        telescope.load_extension("bibtex")
+        telescope.load_extension "file_browser"
+        telescope.load_extension "yank_history"
+        telescope.load_extension "bibtex"
       end,
     },
   },
@@ -239,6 +262,15 @@ local config = {
   -- augroups/autocommands and custom filetypes also this just pure lua so
   -- anything that doesn't fit in the normal config locations above can go here
   polish = function()
+    -- Neovide-specific configuration
+    if vim.g.neovide then
+      -- Helper function for transparency formatting
+      local alpha = function() return string.format("%x", math.floor(255 * (vim.g.transparency or 0.8))) end
+
+      -- g:neovide_transparency=0 unifies transparency of content and title bar
+      vim.g.neovide_transparency = 0.0
+      vim.g.neovide_background_color = "#0f1117" .. alpha()
+    end
   end,
 }
 
