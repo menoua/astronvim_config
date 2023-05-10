@@ -106,6 +106,7 @@ local config = {
     { import = "astrocommunity.colorscheme.monokai-pro" },
 
     -- Transparency
+    -- To toggle transparent mode, type command ":TransparentToggle"
     { import = "astrocommunity.utility.transparent-nvim" },
 
     -- Indentation
@@ -124,47 +125,11 @@ local config = {
     -- Rust language support
     { import = "astrocommunity.pack.rust" },
 
-    -- Python language support (modified version of "astrocommunity.pack.python")
-    -- If using conda to manage python environment, start vi from correct environment,
-    -- otherwise use VenvSelect to select virtual environment. For pylint to work properly
-    -- in a conda environment, it has to be installed in that environment.
-    {
-      "nvim-treesitter/nvim-treesitter",
-      opts = function(_, opts)
-        if opts.ensure_installed ~= "all" then
-          opts.ensure_installed = utils.list_insert_unique(opts.ensure_installed, { "python", "toml" })
-        end
-      end,
-    },
-    {
-      "williamboman/mason-lspconfig.nvim",
-      opts = function(_, opts)
-        opts.ensure_installed = utils.list_insert_unique(opts.ensure_installed, { "pyright", "ruff_lsp" })
-      end,
-    },
-    {
-      "jay-babu/mason-null-ls.nvim",
-      opts = function(_, opts)
-        opts.ensure_installed = utils.list_insert_unique(opts.ensure_installed, { "isort", "black" })
-      end,
-    },
-    {
-      "jay-babu/mason-nvim-dap.nvim",
-      opts = function(_, opts) opts.ensure_installed = utils.list_insert_unique(opts.ensure_installed, "python") end,
-    },
-    {
-      "linux-cultist/venv-selector.nvim",
-      opts = {},
-      keys = { { "<leader>lv", "<cmd>:VenvSelect<cr>", desc = "Select VirtualEnv" } },
-    },
-    {
-      -- This is needed for pylint to work in a virtualenv.
-      -- See https://github.com/williamboman/mason.nvim/issues/668#issuecomment-1320859097
-      "williamboman/mason.nvim",
-      opts = {
-        PATH = "append",
-      },
-    },
+    -- Python language support
+    -- If using conda to manage python environment, start vi (or neovide) from the target
+    -- environment, otherwise use VenvSelect to select virtual environment. For pylint to
+    -- work properly in a conda environment, it has to be installed in that environment.
+    { import = "astrocommunity.pack.python" },
 
     -- Markdown support
     { import = "astrocommunity.pack.markdown" },
@@ -208,7 +173,7 @@ local config = {
     {
       "nvim-telescope/telescope.nvim",
       config = function(plugin, opts)
-        require "plugins.configs.telescope"(plugin, opts) -- include the default astronvim config
+        require "plugins.configs.telescope" (plugin, opts) -- include the default astronvim config
         local telescope = require "telescope"
 
         telescope.setup {
@@ -263,7 +228,7 @@ local config = {
     -- Neovide-specific configuration
     if vim.g.neovide then
       -- Helper function for transparency formatting
-      local alpha = function() return string.format("%x", math.floor(255 * (vim.g.transparency or 0.8))) end
+      local alpha = function() return string.format("%x", math.floor(255 * (vim.g.transparency or 0.85))) end
 
       -- g:neovide_transparency=0 unifies transparency of content and title bar
       vim.g.neovide_transparency = 0.0
