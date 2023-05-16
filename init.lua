@@ -112,6 +112,16 @@ local config = {
       end,
     },
 
+    -- Disable better escape
+    { "max397574/better-escape.nvim",                        enabled = false },
+
+    -- LSP floating signature
+    {
+      "ray-x/lsp_signature.nvim",
+      event = "BufRead",
+      config = function() require("lsp_signature").setup() end,
+    },
+
     -- Configure linters/formatters through null-ls
     {
       "null-ls.nvim",
