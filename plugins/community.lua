@@ -17,6 +17,7 @@ return {
 
   -- Language support
   { import = "astrocommunity.pack.lua" },
+  { import = "astrocommunity.pack.bash" },
   { import = "astrocommunity.pack.rust" },
   { import = "astrocommunity.pack.python" },
   { import = "astrocommunity.pack.markdown" },
