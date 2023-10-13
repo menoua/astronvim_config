@@ -46,6 +46,14 @@ return {
       --   return true
       -- end
     },
+    -- ovverride lsp default config
+    config = {
+      clangd = {
+        capabilities = {
+          offsetEncoding = "utf-8",
+        },
+      },
+    },
     -- enable servers that you already have installed without mason
     servers = {},
   },
