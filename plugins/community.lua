@@ -34,7 +34,7 @@ return {
     opts = {
       colorcolumn = "100",
       custom_colorcolumn = { lua = "125" },
-      disabled_filetypes = { "NvimTree", "lazy", "mason", "help", "text", "markdown" },
+      disabled_filetypes = { "neo-tree", "alpha", "help", "text", "markdown" },
     },
   },
 
