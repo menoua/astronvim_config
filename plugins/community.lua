@@ -38,6 +38,19 @@ return {
     },
   },
 
+  -- Diagnostics
+  {
+    "folke/trouble.nvim",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    opts = {
+      mode = "document_diagnostics",
+      action_keys = { -- key mappings for actions in the trouble list
+        open_code_href = { "c", "h" }, -- if present, open a URI with more information about the diagnostic
+      },
+      use_diagnostic_signs = true, -- enabling this will use the signs defined in your lsp client
+    },
+  },
+
   -- Telescope extensions
   "gbprod/yanky.nvim",
   "nvim-telescope/telescope-file-browser.nvim",

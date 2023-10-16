@@ -4,6 +4,9 @@
 -- lower level configuration and more robust one. (which-key will
 -- automatically pick-up stored data by this setting.)
 local telescope = require "telescope.builtin"
+local trouble = require "trouble"
+local utils = require "astronvim.utils"
+local get_icon = utils.get_icon
 
 return {
   -- first key is the mode
@@ -28,6 +31,15 @@ return {
     ["<leader>fe"] = { "<cmd>Telescope file_browser path=%:p:h select_buffer=true<cr>", desc = "File browser" },
     ["?"] = { function() telescope.current_buffer_fuzzy_find() end, desc = "Find words in current buffer" },
 
+    -- Trouble mappings
+    ["<leader>x"] = { desc = get_icon("DiagnosticWarn", 1, true) .. "Diagnostics" },
+    ["<leader>xx"] = { function() trouble.toggle() end, desc = "Toggle diagnostics" },
+    ["<leader>xw"] = { function() trouble.toggle "workspace_diagnostics" end, desc = "Workspace diagnostics" },
+    ["<leader>xd"] = { function() trouble.toggle "document_diagnostics" end, desc = "Document diagnostics" },
+    ["<leader>xq"] = { function() trouble.toggle "quickfix" end, desc = "Quickfix diagnostics" },
+    ["<leader>xl"] = { function() trouble.toggle "loclist" end, desc = "Items from location list" },
+    ["gR"] = { function() trouble.toggle "lsp_references" end, desc = "LSP references" },
+
     -- mappings seen under group name "Buffer"
     ["<leader>bD"] = {
       function()
@@ -37,11 +49,6 @@ return {
       end,
       desc = "Pick to close",
     },
-    -- tables with the `name` key will be registered with which-key if it's installed
-    -- this is useful for naming menus
-    ["<leader>b"] = { name = "Buffers" },
-    -- quick save
-    -- ["<C-s>"] = { ":w!<cr>", desc = "Save File" },  -- change description but the same command
   },
   t = {
     -- setting a mapping to false will disable it
