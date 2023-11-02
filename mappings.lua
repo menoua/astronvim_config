@@ -11,17 +11,15 @@ local get_icon = utils.get_icon
 return {
   -- first key is the mode
   n = {
-    -- second key is the lefthand side of the map
-
     -- navigate buffer tabs with `H` and `L`
-    -- L = {
-    --   function() require("astronvim.utils.buffer").nav(vim.v.count > 0 and vim.v.count or 1) end,
-    --   desc = "Next buffer",
-    -- },
-    -- H = {
-    --   function() require("astronvim.utils.buffer").nav(-(vim.v.count > 0 and vim.v.count or 1)) end,
-    --   desc = "Previous buffer",
-    -- },
+    L = {
+      function() require("astronvim.utils.buffer").nav(vim.v.count > 0 and vim.v.count or 1) end,
+      desc = "Next buffer",
+    },
+    H = {
+      function() require("astronvim.utils.buffer").nav(-(vim.v.count > 0 and vim.v.count or 1)) end,
+      desc = "Previous buffer",
+    },
 
     -- Telescope extra mappings
     ["<leader> "] = { function() telescope.buffers() end, desc = "Find buffers" },
@@ -49,9 +47,15 @@ return {
       end,
       desc = "Pick to close",
     },
+
+    -- delete without overwriting the main register
+    ["<leader>d"] = { '"_d', desc = "Wreckless delete" },
   },
-  t = {
-    -- setting a mapping to false will disable it
-    -- ["<esc>"] = false,
+  v = {
+    -- delete without overwriting the main register
+    ["<leader>d"] = { '"_d', desc = "Wreckless delete" },
+
+    -- paste without overwriting the main register
+    ["<leader>p"] = { '"_dP', desc = "Wreckless paste" },
   },
 }
